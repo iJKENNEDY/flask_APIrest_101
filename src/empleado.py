@@ -1,8 +1,9 @@
+import sqlite3
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 
-db_connect = create_engine('chinook.db') #La ruta depende de donde tengas almacenada la base de datos
+db_connect = create_engine('sqlite:///chinook.db') #La ruta depende de donde tengas almacenada la base de datos
 app = Flask(__name__)
 api = Api(app)
 
