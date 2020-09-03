@@ -1,4 +1,3 @@
-import sqlite3
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
@@ -53,11 +52,26 @@ class EmployeeData(Resource):
         query = conn.execute("select * from employees where EmployeeId =%d " % int(employee_id))
         result = {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor]}
         return jsonify(result)
+ 
+class UpdateEmployee(Resource):
+    def put(self, employee_id):
+        first_name = request.json['FirstName']
+        conn = db_connect.connect()
+        query = conn.execute("update employees set FirstName='%s'  where EmployeeId=%s" % (first_name, int(employee_id)))
+        return {'status':'Cambio de nombre realizado'}    
+    
+class DeleteEmployee(Resource):
+    def delete(self, employee_id):
+        conn = db_connect.connect()
+        query = conn.execute("delete from employees where EmployeeId=%d " % int(employee_id))
+        return {'status':'Empleado borrado con éxito'}    
 
 
 api.add_resource(Employees, '/employees')  # Route_1
 api.add_resource(Tracks, '/tracks')  # Route_2
 api.add_resource(EmployeeData, '/employees/<employee_id>')  # Route_3
+api.add_resource(UpdateEmployee, '/employee/<employee_id>')  # Route_4
+api.add_resource(DeleteEmployee, '/delete/<employee_id>')   # Route_5
 
 if __name__ == '__main__':
      app.run(port='5000')
