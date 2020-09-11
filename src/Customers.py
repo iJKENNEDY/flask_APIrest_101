@@ -38,6 +38,14 @@ class CustomerData(Resource):
         result = {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor]}
         return jsonify(result)
 
+class CustomerAll(Resource):
+    def get(self):
+        conn = db_connect.connect()
+        query = conn.execute("select CustomerId, FirstName, LastName,Company,Address,City,State,Country,PostalCode,Phone,Fax,Email,SupportRepId from customers;")
+        result = {'data': [dict(zip(tuple(query.keys()),i)) for i in query.cursor]}
+        return jsonify(result)
+
+
 
 class UpdateCustomer(Resource):
     def put(self, customerId):
@@ -55,6 +63,7 @@ class DeleteCustomer(Resource):
 
 
 api.add_resource(Customers, '/customers')
+api.add_resource(CustomerAll, '/customersAll')
 api.add_resource(CustomerData, '/customers/<customerId>')
 api.add_resource(UpdateCustomer, '/customers/<customerId>')
 api.add_resource(DeleteCustomer, '/delete/<customer_id>')

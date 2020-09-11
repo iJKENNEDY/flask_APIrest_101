@@ -21,6 +21,14 @@ class Album(Resource):
         return {'status': 'Nuevo album'}
 
 
+class AlbumAll(Resource):
+    def get(self):
+        conn = db_connect.connect()
+        query = conn.execute("select Title, ArtistId from albums;")
+        result = {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor]}
+        return jsonify(result)
+
+
 class AlbumData(Resource):
     def get(self, albumId):
         conn = db_connect.connect()
