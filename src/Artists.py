@@ -28,6 +28,13 @@ class ArtistsData(Resource):
         return jsonify(result)
 
 
+class ArtistsAll(Resource):
+    def get(self):
+        conn = db_connect.connect()
+        query =conn.execute("select ArtistsData, Name from artists")
+        result = {'data': [dict(zip(tuple(query.keys()), i)) for i in query.cursor]}
+        return jsonify(result)
+
 class UpdateArtist(Resource):
     def put(self,artistId):
         name = request.json['Name']
