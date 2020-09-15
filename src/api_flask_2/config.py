@@ -1,3 +1,9 @@
+
+
+
+# pip install flask, psycopg2-binary, Flask-SQLAlchemy
+
+
 class Config:
     pass
 
